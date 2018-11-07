@@ -25,3 +25,9 @@ services:
       - ./data/replica:/data/replica
     ports:
       - 27018:27018
+  redis:
+    image: redis
+    volumes:
+      - ../data/redis:/data
+    ports:
+      - "6379:6379"
