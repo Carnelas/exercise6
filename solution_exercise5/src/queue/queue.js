@@ -16,8 +16,8 @@ module.exports = function (req, res) {
     });
 };
 
-queue.on("job enqueue", function (id, type) {
-    console.log("Job %s got queued of type %s", id, type);
+queue.on("msg enqueue", function (id, type) {
+    console.log("msg %s got queued of type %s", id, type);
 });
 queue.save();
 // The first argument should be the name of the job, and the second a function, 
