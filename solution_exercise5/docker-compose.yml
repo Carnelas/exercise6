@@ -7,6 +7,7 @@ services:
     links:
       - mongodb
       - replica
+      - redis
   messageapp:
     image: cabify/backend-bootcamp-messageapp
     ports:
