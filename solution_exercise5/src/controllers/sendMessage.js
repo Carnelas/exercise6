@@ -4,25 +4,21 @@ const getCredit = require("../clients/getCredit");
 
 const random = n => Math.floor(Math.random() * Math.floor(n));
 
-module.exports = function (req, res) {
-  const body = JSON.stringify(req.body);
+module.exports = function (message, done) {
+  const body = JSON.stringify(message);
   let query = getCredit();
+  const queryId = message.qId
+  saveMessage(
+    {
+      ...message,
+    },
+    () => {
+      console.log("Internal server error: SERVICE ERROR");
+    }
+  );
 
   query.exec(function (err, credit) {
     if (err) return console.log(err);
-    //here msg status set to pending
-    saveMessage(
-      {
-        ...req.body,
-        status: "PENDING"
-      },
-      function (_result, error) {
-        if (error) {
-          res.statusCode = 500;
-          res.end(error);
-        }
-      }
-    )
 
     current_credit = credit[0].amount;
     // check if the amount of credit is enough
@@ -45,10 +41,29 @@ module.exports = function (req, res) {
       // here changes to ok or error 
       postReq.on("response", postRes => {
         if (postRes.statusCode === 200) {
-          status = "OK"
+          saveMessage(
+            {
+              ...message,
+              qId: message.qId,
+              status: "OK"
+            },
+            () => {
+              console.log("Error in server response");
+            }, idQuery
+          );
         } else {
           console.error("Error while sending message");
-          status = "EROOR"
+
+          saveMessage(
+            {
+              ...message,
+              qId: message.qId,
+              status: "ERROR"
+            },
+            () => {
+              console.log("Internal server error: SERVICE ERROR");
+            }, idQuery
+          );
         }
       });
 

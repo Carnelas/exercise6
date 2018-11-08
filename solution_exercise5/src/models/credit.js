@@ -9,7 +9,7 @@ let creditSchema = new mongoose.Schema({
   amount: Number,
   status: {
     type: String,
-    enum: ["ERROR", "OK", "TIMEOUT"]
+    enum: ["PENDING", "ERROR", "OK", "TIMEOUT"]
   }
 });
 

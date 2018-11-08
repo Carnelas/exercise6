@@ -5,7 +5,7 @@ let messageSchema = new mongoose.Schema({
   destination: String,
   body: String,
   location: {
-  	name: {
+    name: {
       type: String,
       default: "Default"
     },
@@ -16,7 +16,11 @@ let messageSchema = new mongoose.Schema({
   },
   status: {
     type: String,
-    enum: ["ERROR", "OK", "TIMEOUT"]
+    enum: ["PENDING", "ERROR", "OK", "TIMEOUT"]
+  },
+  qId: {
+    type: String,
+    default: "Default"
   }
 });
 
