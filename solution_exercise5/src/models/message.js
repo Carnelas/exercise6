@@ -24,4 +24,4 @@ let messageSchema = new mongoose.Schema({
   }
 });
 
-module.exports = (dbKey) => database.get(dbKey).model("Message", messageSchema);
+module.exports = dbKey => database.get(dbKey).model("Message", messageSchema);

@@ -13,4 +13,4 @@ let creditSchema = new mongoose.Schema({
   }
 });
 
-module.exports = (dbKey) => database.get(dbKey).model("Credit", creditSchema);
+module.exports = dbKey => database.get(dbKey).model("Credit", creditSchema);

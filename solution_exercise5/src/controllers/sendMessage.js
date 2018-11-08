@@ -4,20 +4,20 @@ const getCredit = require("../clients/getCredit");
 
 const random = n => Math.floor(Math.random() * Math.floor(n));
 
-module.exports = function (message, done) {
+module.exports = function(message, done) {
   const body = JSON.stringify(message);
   let query = getCredit();
-  const queryId = message.qId
+  const queryId = message.qId;
   saveMessage(
     {
-      ...message,
+      ...message
     },
     () => {
       console.log("Internal server error: SERVICE ERROR");
     }
   );
 
-  query.exec(function (err, credit) {
+  query.exec(function(err, credit) {
     if (err) return console.log(err);
 
     current_credit = credit[0].amount;
@@ -38,7 +38,7 @@ module.exports = function (message, done) {
       };
 
       let postReq = http.request(postOptions);
-      // here changes to ok or error 
+      // here changes to ok or error
       postReq.on("response", postRes => {
         if (postRes.statusCode === 200) {
           saveMessage(
@@ -49,7 +49,8 @@ module.exports = function (message, done) {
             },
             () => {
               console.log("Error in server response");
-            }, idQuery
+            },
+            idQuery
           );
         } else {
           console.error("Error while sending message");
@@ -62,7 +63,8 @@ module.exports = function (message, done) {
             },
             () => {
               console.log("Internal server error: SERVICE ERROR");
-            }, idQuery
+            },
+            idQuery
           );
         }
       });
@@ -72,7 +74,7 @@ module.exports = function (message, done) {
       postReq.on("timeout", () => {
         console.error("Timeout Exceeded!");
         postReq.abort();
-        status = "TIMEOUT"
+        status = "TIMEOUT";
         saveMessage(
           {
             ...req.body,
@@ -85,7 +87,7 @@ module.exports = function (message, done) {
         );
       });
 
-      postReq.on("error", () => { });
+      postReq.on("error", () => {});
       postReq.write(body);
       postReq.end();
     } else {
