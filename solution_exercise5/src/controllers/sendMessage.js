@@ -6,11 +6,23 @@ const random = n => Math.floor(Math.random() * Math.floor(n));
 
 module.exports = function (req, res) {
   const body = JSON.stringify(req.body);
-
-  var query = getCredit();
+  let query = getCredit();
 
   query.exec(function (err, credit) {
     if (err) return console.log(err);
+
+    saveMessage(
+      {
+        ...req.body,
+        status: "PENDING"
+      },
+      function (_result, error) {
+        if (error) {
+          res.statusCode = 500;
+          res.end(error);
+        }
+      }
+    )
 
     current_credit = credit[0].amount;
     // check if the amount of credit is enough
@@ -33,34 +45,10 @@ module.exports = function (req, res) {
 
       postReq.on("response", postRes => {
         if (postRes.statusCode === 200) {
-          //
-          saveMessage(
-            {
-              ...req.body,
-              status: "OK"
-            },
-            function (_result, error) {
-              if (error) {
-                res.statusCode = 500;
-                res.end(error);
-              } else {
-                res.end(postRes.body);
-              }
-            }
-          );
+          status = "OK"
         } else {
           console.error("Error while sending message");
-
-          saveMessage(
-            {
-              ...req.body,
-              status: "ERROR"
-            },
-            () => {
-              res.statusCode = 500;
-              res.end("Internal server error: SERVICE ERROR");
-            }
-          );
+          status = "EROOR"
         }
       });
 
@@ -69,7 +57,7 @@ module.exports = function (req, res) {
       postReq.on("timeout", () => {
         console.error("Timeout Exceeded!");
         postReq.abort();
-
+        status = "TIMEOUT"
         saveMessage(
           {
             ...req.body,

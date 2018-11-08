@@ -1,7 +1,7 @@
 const kue = require('kue');
 let queue = kue.createQueue();
 let util = require('util');
-const sendMessage = require("../controllers/sendMessage");
+const sendMessage = require("./sendMessage");
 
 module.exports = function (req, res) {
     // the first argument identifies the type of job, and any additional 
