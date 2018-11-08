@@ -8,6 +8,7 @@ services:
       - mongodb
       - replica
       - redis
+      - messageapp
   messageapp:
     image: cabify/backend-bootcamp-messageapp
     ports:
@@ -17,7 +18,7 @@ services:
     volumes:
       - ./data/db:/data/db
     ports:
-      - 27017:27017
+      - 27019:27017
   replica:
     image: mongo
     command: mongod --port 27018

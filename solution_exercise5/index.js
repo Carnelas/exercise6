@@ -50,7 +50,7 @@ const creditSchema = {
   }
 };
 
-const queue = require('./src/queue/queue')
+const queue = require('./src/controllers/queue')
 
 
 app.post(
