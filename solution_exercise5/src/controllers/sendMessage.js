@@ -10,7 +10,7 @@ module.exports = function (req, res) {
 
   query.exec(function (err, credit) {
     if (err) return console.log(err);
-
+    //here msg status set to pending
     saveMessage(
       {
         ...req.body,
@@ -42,7 +42,7 @@ module.exports = function (req, res) {
       };
 
       let postReq = http.request(postOptions);
-
+      // here changes to ok or error 
       postReq.on("response", postRes => {
         if (postRes.statusCode === 200) {
           status = "OK"
@@ -53,7 +53,7 @@ module.exports = function (req, res) {
       });
 
       postReq.setTimeout(random(6000));
-
+      // here sets to timeout
       postReq.on("timeout", () => {
         console.error("Timeout Exceeded!");
         postReq.abort();
@@ -71,7 +71,6 @@ module.exports = function (req, res) {
       });
 
       postReq.on("error", () => { });
-
       postReq.write(body);
       postReq.end();
     } else {
@@ -80,3 +79,5 @@ module.exports = function (req, res) {
     }
   });
 };
+
+// necesitaria actualizar el estado en cada mensaje
